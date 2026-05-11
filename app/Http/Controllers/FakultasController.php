@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Fakultas;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Unique;
 
 class FakultasController extends Controller
 {
@@ -15,7 +16,7 @@ class FakultasController extends Controller
         // akses tabel Falkultas
         $result = Fakultas::all(); // Select * from Fakultas
         // dd($result); // dump data 
-       return view('index', compact('result')); // passing data ke view
+       return view('fakultas.index', compact('result')); // passing data ke view
      }
 
     /**
@@ -23,7 +24,7 @@ class FakultasController extends Controller
      */
     public function create()
     {
-        //
+        return view('fakultas.create');
     }
 
     /**
@@ -31,7 +32,20 @@ class FakultasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+            // validasi data
+            $input = $request->validate([
+                'nama_fakultas' => 'required|unique:Fakultas',
+                'singkatan' => 'required',
+            ]);
+
+        
+     //simpan ke tabel fakulas
+        Fakultas::create($input);
+
+
+     // redirect ke route halaman Fakultas.index
+    return redirect()->route('Fakultas.index');
     }
 
     /**
